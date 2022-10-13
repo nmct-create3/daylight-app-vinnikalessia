@@ -1,3 +1,27 @@
+let sunriseElement;
+let sunsetElement;
+let minutesLeftElement;
+let locationElement;
+
+const setDOMElements = () => {
+	sunriseElement = document.querySelector('.js-sunrise');
+	sunsetElement = document.querySelector('.js-sunset');
+	minutesLeftElement = document.querySelector('.js-time-left');
+	if(!sunriseElement || !sunsetElement || !minutesLeftElement) {
+		throw new Error('Could not find all elements');
+	}
+}
+
+const makeReadableTimeFormatFromTimestamp = (timestamp) => {
+	return new DataTransfer(timestamp * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', hour12:true});
+}
+
+const setLocationData = (city) => {
+	sunriseElement.innertext = makeReadableTimeFormatFromTimestamp(city.sunrise);
+	sunsetElement.innertext = makeReadableTimeFormatFromTimestamp(city.sunset);
+	locationElement.innertext = `${city.name}, ${city.country}`;
+}
+
 // _ = helper functions
 function _parseMillisecondsIntoReadableTime(timestamp) {
 	//Get hours from milliseconds
@@ -13,7 +37,6 @@ function _parseMillisecondsIntoReadableTime(timestamp) {
 	return hours.substr(-2) + ':' + minutes.substr(-2); //  + ':' + s
 }
 
-// 5 TODO: maak updateSun functie
 
 // 4 Zet de zon op de juiste plaats en zorg ervoor dat dit iedere minuut gebeurt.
 let placeSunAndStartMoving = (totalMinutes, sunrise) => {
@@ -44,16 +67,10 @@ const getData = (endpoint) => {
 	.catch((e) => console.error(e))
 }
 
-// 2 Aan de hand van een longitude en latitude gaan we de yahoo wheater API ophalen.
-let getAPI = (lat, lon) => {
-	const data = await getData(getEndpoint(lat, lon));
-	console.log(data)
-	// Eerst bouwen we onze url op
-	// Met de fetch API proberen we de data op te halen.
-	// Als dat gelukt is, gaan we naar onze showResult functie.
-};
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
 	// 1 We will query the API with longitude and latitude.
-	getAPI(50.8027841, 3.2097454);
+	let lat = 50.8027841;
+	let lon = 3.2097454;
+	const endpoint = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=1582dbea022940ad4b9e58b28cd900ad&units=metric&lang=nl&cnt=1`;
+	setDOMElements()
 });

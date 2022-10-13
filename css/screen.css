@@ -13,6 +13,9 @@
 
     --color-front: var(--color-dark);
     --color-back: var(--color-light);
+
+    --color-night-front: #CCE7FF;
+    --color-night-back: #0F3557;
     /* opacity */
 
     /* transitions */
@@ -36,6 +39,7 @@ html {
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
 }
 
 *,
@@ -384,6 +388,18 @@ Main app wrapper
 */
 
 /* Night version: just switch the light and dark vars */
+.is-night{
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: var(--color-night-back);
+    fill: var(--color-night-front);
+    font-family:"Work Sans", sans-serif;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--color-night-front);
+}
+
 
 /*------------------------------------*\
 #MEDIA
