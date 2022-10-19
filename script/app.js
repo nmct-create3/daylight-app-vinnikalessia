@@ -1,62 +1,76 @@
-let sunriseElement;
-let sunsetElement;
-let minutesLeftElement;
-let locationElement;
-let sunElement;
-let timeLeftElement;
+// let sunriseElement;
+// let sunsetElement;
+// let minutesLeftElement;
+// let locationElement;
+// let sunElement;
+// let timeLeftElement;
 let totalTime = 0;
+let totalTimems = 0;
+
 
 // PLACE SUN ON LEFT AND BOTTOM POSITION
 // BASED ON TOTAL TIME AND CURRENT TIME
-const placeSun = (sunrise) => {
-	const now = new Date();
-	const sunriseDate = new Date(sunrise * 1000);
+// const placeSun = (sunrise) => {
+// 	const now = new Date();
+// 	const sunriseDate = new Date(sunrise * 1000);
 
-	const minutesLeft = 
-	now.getHours() * 60 + 
-	now.getMinutes() - 
-	(sunriseDate.getHours() * 60 + sunriseDate.getMinutes());
+// 	const minutesLeft = 
+// 	now.getHours() * 60 + 
+// 	now.getMinutes() - 
+// 	(sunriseDate.getHours() * 60 + sunriseDate.getMinutes());
 
-	const percentage = (100/(totalTime.getHours() * 60 / totalTime.getMinutes())) * minutesLeft;
-	const sunLeftPosition = 50;
-	const sunBottomPosition = 50;
+// 	const percentage = (100/(totalTime.getHours() * 60 / totalTime.getMinutes())) * minutesLeft;
+// 	const sunLeftPosition = 50;
+// 	const sunBottomPosition = 50;
 
-	sunElement.style.left = `${sunLeftPosition}%`;
-	sunElement.style.bottom = `${sunBottomPosition}%`;
+// 	sunElement.style.left = `${sunLeftPosition}%`;
+// 	sunElement.style.bottom = `${sunBottomPosition}%`;
+// }
+
+const updateTimeAndTimeLeft = (sunset) => {
+	// sunElement.dataSet.time = new Date().toLocaleDateString([], {hour:'2-digit', minute:'2-digit', hour12:true});
+	// timeLeftElement.innertext = timeLeftTimeStamp;
+	document.querySelector('.js-sun').CDATA_SECTION_NODE.time = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+	
+	console.log("👩‍🦰" + typeof(new Date().getTime())); // number
+	console.log("👵" + typeof(_parseMillisecondsIntoReadableTime(sunset))); // string
+	console.log("👼" + typeof(new Date().getTime())); // number
+
+	const timeleft = _parseMillisecondsIntoReadableTime(sunset) - new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+	document.querySelector('.js-time-left').innerText = timeleft;
+	console.info('sunset timeleft ' + sunset);
+	console.info('current time ' + new Date());
+	console.info('sunset - current ')
+	console.info(typeof(sunset - new Date()));
 }
 
-const updateTimeAndTimeLeft = (timeLeftTimeStamp) => {
-	sunElement.dataSet.time = new Date().toLocaleDateString([], {hour:'2-digit', minute:'2-digit', hour12:true});
-	timeLeftElement.innertext = timeLeftTimeStamp;
-}
+// const setDOMElements = () => {
+// 	sunriseElement = document.querySelector('.js-sunrise');
+// 	sunsetElement = document.querySelector('.js-sunset');
+// 	minutesLeftElement = document.querySelector('.js-time-left');
 
-const setDOMElements = () => {
-	sunriseElement = document.querySelector('.js-sunrise');
-	sunsetElement = document.querySelector('.js-sunset');
-	minutesLeftElement = document.querySelector('.js-time-left');
+// 	sunElement = document.querySelector('.js-sun');
+// 	timeLeftElement = document.querySelector('.js-time-left');
 
-	sunElement = document.querySelector('.js-sun');
-	timeLeftElement = document.querySelector('.js-time-left');
-
-	if(
-		!sunriseElement || 
-		!sunsetElement || 
-		!minutesLeftElement ||
-		!sunElement ||
-		!timeLeftElement) {
-		throw new Error('Could not find all elements');
-	}
-}
+// 	if(
+// 		!sunriseElement || 
+// 		!sunsetElement || 
+// 		!minutesLeftElement ||
+// 		!sunElement ||
+// 		!timeLeftElement) {
+// 		throw new Error('Could not find all elements');
+// 	}
+// }
 
 const makeReadableTimeFormatFromTimestamp = (timestamp) => {
 	return new Date(timestamp * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
-const setLocationData = (city) => {
-	sunriseElement.innertext = makeReadableTimeFormatFromTimestamp(city.sunrise);
-	sunsetElement.innertext = makeReadableTimeFormatFromTimestamp(city.sunset);
-	locationElement.innerText = `${city.name}, ${city.country}`;
-}
+// const setLocationData = (city) => {
+// 	sunriseElement.innertext = makeReadableTimeFormatFromTimestamp(city.sunrise);
+// 	sunsetElement.innertext = makeReadableTimeFormatFromTimestamp(city.sunset);
+// 	locationElement.innerText = `${city.name}, ${city.country}`;
+// }
 
 // _ = helper functions
 function _parseMillisecondsIntoReadableTime(timestamp) {
@@ -75,7 +89,20 @@ function _parseMillisecondsIntoReadableTime(timestamp) {
 
 
 // 4 Zet de zon op de juiste plaats en zorg ervoor dat dit iedere minuut gebeurt.
-let placeSunAndStartMoving = (totalMinutes, sunrise) => {
+let placeSunAndStartMoving = (sunrise) => {
+	const currenttime = new Date();
+	const percentageday = (currenttime - sunrise) / totalTimems;
+	const sunriseLeftPosition = percentageday * 100;
+	const sunriseBottomPosition = Math.sin(Math.PI * percentageday) * 100;
+
+	console.info('currenttime' + currenttime);
+	console.info('totaltime' + totaltimems);
+	console.info('sunrise' + sunrise);
+	console.info('percentageday' + percentageday);
+	console.info('sunrisebottom' + sunriseBottomPosition);
+
+	document.querySelector('.js-sun').style.left = `${sunriseLeftPosition}%`;
+	document.querySelector('.js-sun').style.bottom = `${sunriseBottomPosition}%`;
 	// In de functie moeten we eerst wat zaken ophalen en berekenen.
 	// Haal het DOM element van onze zon op en van onze aantal minuten resterend deze dag.
 	// Bepaal het aantal minuten dat de zon al op is.
@@ -89,12 +116,15 @@ let placeSunAndStartMoving = (totalMinutes, sunrise) => {
 };
 
 // 3 Met de data van de API kunnen we de app opvullen
-let showResult = queryResponse => {
+let showResult = (queryResponse) => {
 	// We gaan eerst een paar onderdelen opvullen
 	// Zorg dat de juiste locatie weergegeven wordt, volgens wat je uit de API terug krijgt.
 	// Toon ook de juiste tijd voor de opkomst van de zon en de zonsondergang.
 	// Hier gaan we een functie oproepen die de zon een bepaalde positie kan geven en dit kan updaten.
 	// Geef deze functie de periode tussen sunrise en sunset mee en het tijdstip van sunrise.
+	document.querySelector('.js-location').innerText = queryResponse.name + ', ' + queryResponse.country;
+	document.querySelector('.js-sunrise').innerText = _parseMillisecondsIntoReadableTime(queryResponse.sunrise);
+	document.querySelector('.js-sunset').innerText = _parseMillisecondsIntoReadableTime(queryResponse.sunset);
 };
 
 const getData = (endpoint) => {
@@ -108,13 +138,17 @@ document.addEventListener('DOMContentLoaded', async function() {
 	let lat = 50.8027841;
 	let lon = 3.2097454;
 	const endpoint = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=1582dbea022940ad4b9e58b28cd900ad&units=metric&lang=nl&cnt=1`;
-	setDOMElements();
-
-	const {city} = await getData(endpoint);
-	setLocationData(city);
+	
+	// setDOMElements();
+	// setLocationData(city);
 	// totalTime = new Date(city.sunset - city.sunrise);
-	totalTime = new Date(city.sunset - city.sunrise *60); // geen idee of dit klopt
+	
+	const {city} = await getData(endpoint);
+	showResult(city);
+	// totalTime = new Date(city.sunset - city.sunrise *60); // geen idee of dit klopt
+	totalTime = (_parseMillisecondsIntoReadableTime(city.sunset) - _parseMillisecondsIntoReadableTime(city.sunrise)) / 60;
+	totalTimems = city.sunset - city.sunrise;
 
-	updateTimeAndTimeLeft();
-	placeSun(City.sunrise);
+	updateTimeAndTimeLeft(city.sunset);
+	placeSunAndStartMoving(city.sunrise);
 });
